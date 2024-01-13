@@ -1,15 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
+
+#index-content-area{
+  margin: 0;
+  padding: 0;
+}
 /* Base styles */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #fff;
 }
 
 
@@ -17,6 +28,7 @@ body {
 header {
   color: #fff;
   padding: 20px 0px 20px 0px;
+  position: relative;
 }
 
 header h1 {
@@ -70,23 +82,26 @@ div#tools p{
   margin:0;
   padding:0;
   color: #000;
+  font-family: 'Open Sans', sans-serif;
 }
 span.siteName {
   font-size: 2rem;
   margin: 0px;
   margin-left: 8px;
   padding: 0;
+  font-family: 'Roboto','sans-serif';
+  font-weight: 700;
 }
 span.siteName a {
   text-decoration: none;
   color:#000;
+
 }
 
 
 /* Main content styles */
 
 main {
-  background-color: #fff;
   margin-bottom: 20px;
   margin-top: 0px;
   padding-top: 5px;
@@ -120,7 +135,9 @@ main h2 {
 
 .banner.ad h3 {
   margin: 0;
-  color: #2FAFD1;
+  color: #005c75;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700; 
 }
 
 .banner.ad ul {
@@ -131,7 +148,7 @@ main h2 {
 .banner.ad ul li {
   list-style-type: none;
   padding-top: 2px;
-  color: #2FAFDF;
+  color: #245c70;
 }
 
 .car{
@@ -145,10 +162,10 @@ main h2 {
 
 /* Button styles  */
 button {
-  background-color: #2FAFD1;
-  color: #000;
-  font-weight: bolder;
-  font-size: medium;
+  background-color: #005c75;
+  color: #f8f8f8;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
   border: none;
   padding: 10px 0px 10px 0px;
   text-transform: uppercase;
@@ -168,13 +185,50 @@ div#dispgrid {
 }
 
 /* Upgrades and Reviews styles */
+.upgrades.and.reviews{
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
 .upgrades, .reviews {
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+}
+
+.reviews h3{
+  margin:0px;
+}
+
+.reviews ul{
+  padding:0px 16px;
+  margin:0px;
+}
+
+.reviews ul li{
+  padding-top:16px;
 }
 
 .upgrade-item {
+  display:flex;
+  flex-direction: column;
   text-align: center;
+}
+
+.img-back {
+  background-color: #005c75;
+  border: 1px black solid;
+  margin: 4px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+
+}
+
+.upgrade-item a{
+  padding-bottom:8px;
 }
 
 .upgrades h2, .reviews h2 {
@@ -183,14 +237,37 @@ div#dispgrid {
 
 /* Footer styles */
 footer {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 10px 20px;
+padding:4px;
 }
+footer p{
+  margin:0;
+}
+
 
 @media (min-width: 1024px) {
   body {
-    background: url('images/site/checkerboard.jpg');
+    background: url('../images/site/checkerboard.jpg');
+  }
+  #index-content-area{
+    margin:12rem;
+    padding:0rem;
+    border:5px #2FAFD1 solid;
+    background-color: white;
+  }
+  .upgrades.and.reviews{
+    display:flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    height: auto;
+  }
+  .upgrades, .reviews {
+    padding: 10px;
+    margin-bottom: 0px;
+    width: 100%;
+  }
+
+  .reviews h3{
+    margin-bottom:32px;
   }
 }
+
