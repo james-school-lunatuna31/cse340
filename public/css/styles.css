@@ -63,14 +63,23 @@ nav ul{
   width: 100%;
   margin: 0;
   background-color: rgb(36,35,50);
+  flex-wrap: wrap;
+
 }
 nav ul li{
-  margin: 16px;
-  width: 100%;
+  margin: 4px;
+  padding:4px;
+  width: auto;
   text-align: center;
   color: white;
   list-style-type: none;
   font-size: 1rem;
+  display:flex;
+}
+nav ul li a{
+  width: auto;
+  margin: 2px;
+  padding: 2px;
 }
 div#tools {
   position: absolute;

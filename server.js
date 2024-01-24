@@ -30,6 +30,10 @@ app.use(static)
 app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes
 app.use("/inv", inventoryRoute)
+// Error trigger route
+app.get("/error", async (req, res, next) => {
+  next({status: 500, message: 'Task Failed Succesfully'})
+})
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
@@ -41,7 +45,7 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
+  let message = err.message || 'Oh no! There was a crash. Maybe try a different route?'
   res.render("errors/error", {
     title: err.status || 'Server Error',
     message,
