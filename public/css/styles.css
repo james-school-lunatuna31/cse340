@@ -199,6 +199,8 @@ main h1, p{
 
 .vehicle-detail{
   margin: 8px;
+  display: flex;
+  flex-direction: column;
 }
 /* Upgrades and Reviews styles */
 .upgrades.and.reviews{
