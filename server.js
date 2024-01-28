@@ -11,6 +11,7 @@ const env = require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
+const errorController = require("./controllers/errorController");
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/index")
 
@@ -41,16 +42,8 @@ app.use(async (req, res, next) => {
 * Express Error Handler
 * Place after all other middleware
 *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  let message = 'Oh no! There was a crash.'
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message,
-    nav
-  })
-})
+app.use(errorController.handleError);
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
