@@ -10,7 +10,7 @@ async function buildLogin(req, res, next) {
     res.render("account/login", {
       title: "Login",
       nav,
-      flashMessage,
+      errors: null,
     })
   }
   async function buildRegister(req, res, next) {
@@ -19,7 +19,7 @@ async function buildLogin(req, res, next) {
     res.render("account/register", {
       title: "Register a New Account",
       nav,
-      flashMessage,
+      errors: null,
     })
   }
 /* ****************************************
@@ -44,14 +44,14 @@ async function registerAccount(req, res) {
       res.status(201).render("account/login", {
         title: "Login",
         nav,
-        flashMessage:'201'
+errors: null,
       })
     } else {
       req.flash("notice", "Sorry, the registration failed.")
       res.status(501).render("account/register", {
         title: "Registration",
         nav,
-        flashMessage: 'error 501'
+        errors: null,
 
       })
     }

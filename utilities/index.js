@@ -58,6 +58,7 @@ Util.buildClassificationGrid = async function(data){
 }
 
 
+
 /* ****************************************
  * Build the inventory item detail view HTML
  **************************************** */

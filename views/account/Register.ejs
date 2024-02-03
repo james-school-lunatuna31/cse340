@@ -1,6 +1,10 @@
 <h1><%= title %></h1>
-<% if (flashMessage) { %>
-<p><%= flashMessage %></p>
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
 <% } %>
 <span class="required"></span>
 <span id="info-banner" style="color: red">is a required field.</span>
@@ -15,6 +19,7 @@
         id="account_firstname"
         name="account_firstname"
         required
+        value="<%= locals.account_firstname %>"
       />
     </div>
     <div>
@@ -24,11 +29,18 @@
         id="account_lastname"
         name="account_lastname"
         required
+        value="<%= locals.account_lastname %>"
       />
     </div>
     <div>
       <label for="account_email" class="required">Email:</label>
-      <input type="email" id="account_email" name="account_email" required />
+      <input
+        type="email"
+        id="account_email"
+        name="account_email"
+        required
+        value="<%= locals.account_email %>"
+      />
     </div>
   </fieldset>
   <fieldset>
