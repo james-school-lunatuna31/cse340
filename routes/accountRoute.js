@@ -7,11 +7,12 @@ const utilities = require("../utilities")
 
 // Route to build login
 router.get("/login", utilities.handleErrors(accounts.buildLogin));
+//post registration
+router.post('/register', utilities.handleErrors(accounts.registerAccount))
 // Route to build register
 router.get("/register", utilities.handleErrors(accounts.buildRegister));
 
-//post registration
-router.post('/register', utilities.handleErrors(accounts.registerAccount))
+
 
 
 module.exports = router; 

@@ -36,18 +36,19 @@ app.use(session({
   saveUninitialized: true,
   name: 'sessionId',
 }))
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout") // not at views root
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use(bodyParser.json())
 
 /* ***********************
  * Routes
