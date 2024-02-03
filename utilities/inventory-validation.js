@@ -9,6 +9,10 @@ const validate = {};
 // Validation rules for adding a new inventory item
 validate.addInventoryItemRules = () => {
     return [
+        body("classificationId")
+            .trim()
+            .isNumeric()
+            .withMessage("Classification ID must be a number."),
         body("itemName")
             .trim()
             .isLength({ min: 1 })
@@ -16,7 +20,31 @@ validate.addInventoryItemRules = () => {
         body("itemPrice")
             .trim()
             .isFloat({ min: 0.01 })
-            .withMessage("Item price must be greater than 0.")
+            .withMessage("Item price must be greater than 0."),
+        body("make")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Make cannot be empty."),
+        body("model")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Model cannot be empty."),
+        body("year")
+            .trim()
+            .isInt({ min: 1900, max: new Date().getFullYear() })
+            .withMessage("Year must be a valid year."),
+        body("description")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Description cannot be empty."),
+        body("color")
+            .trim()
+            .isAlpha()
+            .withMessage("Color must only contain letters."),
+        body("miles")
+            .trim()
+            .isInt()
+            .withMessage("Miles must only contain numbers."),
     ];
 };
 
@@ -42,9 +70,15 @@ validate.checkValidationResults = async (req, res, next) => {
             title: title,
             errors: errors,
             nav,
+            classificationId: req.body.classificationId || null,
             itemName: req.body.itemName || null,
             itemPrice: req.body.itemPrice || null,
-            classificationName: req.body.classificationName || null,
+            make: req.body.make || null,
+            model: req.body.model || null,
+            year: req.body.year || null,
+            description: req.body.description || null,
+            color: req.body.color || null,
+            miles: req.body.miles || null,
         });
         return;
     }

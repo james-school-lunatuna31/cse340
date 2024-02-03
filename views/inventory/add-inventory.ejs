@@ -6,17 +6,24 @@
   <% }) %>
 </ul>
 <% } %>
-<form action="/inv/inventory" method="post">
+<form action="/inv/inventory" method="post" id="addInventoryForm">
+  <label for="classificationId">Classification:</label>
+  <select id="classificationId" name="classificationId" required>
+    <% classifications.forEach(function(classification) { %>
+    <option value="<%= classification.classification_id %>">
+      <%= classification.classification_name %>
+    </option>
+    <% }); %>
+  </select>
   <label for="itemName">Item Name:</label>
   <input
     type="text"
     id="itemName"
     name="itemName"
     required
+    oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
-    oninput="validateInput(this)"
-    value="<%=locals.itemName%>"
   />
   <label for="itemPrice">Item Price:</label>
   <input
@@ -24,13 +31,80 @@
     id="itemPrice"
     name="itemPrice"
     required
-    onfocus="validateInput(this)"
-    onblur="validateInput(this)"
-    oninput="validateInput(this)"
     min="0.01"
     step="any"
-    value="<%=locals.itemPrice%>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
   />
+  <label for="make">Make:</label>
+  <input
+    type="text"
+    id="make"
+    name="make"
+    required
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="model">Model:</label>
+  <input
+    type="text"
+    id="model"
+    name="model"
+    required
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="year">Year:</label>
+  <input
+    type="number"
+    id="year"
+    name="year"
+    required
+    min="1900"
+    max="<%= new Date().getFullYear() %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="description">Description:</label>
+  <textarea
+    id="description"
+    name="description"
+    required
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  ></textarea>
+  <label for="thumbnail">Thumbnail (optional):</label>
+  <input type="text" id="thumbnail" name="thumbnail" />
+  <label for="color">Color:</label>
+  <input
+    type="text"
+    id="color"
+    name="color"
+    required
+    pattern="[A-Za-z]+"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="miles">Miles:</label>
+  <input
+    type="number"
+    id="miles"
+    name="miles"
+    required
+    min="0"
+    step="1"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="img">Image (optional):</label>
+  <input type="text" id="img" name="img" />
   <input type="submit" value="Add Inventory Item" />
 </form>
 <script src="/js/form-validation.js"></script>

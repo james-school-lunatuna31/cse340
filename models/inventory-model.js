@@ -41,4 +41,40 @@ async function getInventoryById(inventory_id) {
   }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById};
+/* ***************************
+ *  Add a new classification to the database
+ * ************************** */
+async function addClassification(classificationName) {
+  if (classificationName.trim() === '') {
+    // If the classification name is blank, do not add anything
+    return;
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO public.classification (classification_name) VALUES ($1) RETURNING *",
+      [classificationName]
+    );
+    return result.rows[0]; // Return the inserted classification
+  } catch (error) {
+    console.error("Error adding classification: " + error);
+    throw error; // Rethrow the error for the caller to handle
+  }
+}
+
+/* ***************************
+ *  Add a new inventory item to the database
+ * ************************** */
+async function addInventory(classification_id, item_name, quantity) {
+  try {
+    const result = await pool.query(
+      "INSERT INTO public.inventory (classification_id, item_name, quantity) VALUES ($1, $2, $3) RETURNING *",
+      [classification_id, item_name, quantity]
+    );
+    return result.rows[0]; // Return the inserted inventory item
+  } catch (error) {
+    console.error("Error adding inventory: " + error);
+    throw error; // Rethrow the error for the caller to handle
+  }
+}
+
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventory};

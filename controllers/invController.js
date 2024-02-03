@@ -64,31 +64,35 @@ invCont.showAddClassificationView = async function(req, res, next) {
 
 // Handle the form submission for adding a new classification
 invCont.addClassification = async function(req, res, next) {
-    inventoryValidation.addClassificationRules();
-    inventoryValidation.checkValidationResults(req, res, next);
-    const classificationName = req.body.classificationName;
-    req.flash('success', 'Classification added successfully');
-    res.redirect('/inv/');
+  let nav = await utilities.getNav();
+  inventoryValidation.addClassificationRules();
+  inventoryValidation.checkValidationResults(req, res, next);
+  const success = await invModel.addClassification(req.body.classificationName);
+  let successMessage = success + " has been added successfully"; 
+  req.flash('success', successMessage); 
+
+  res.redirect('/inv/'); 
 };
 
 // Render the Add New Inventory Item view
 invCont.showAddInventoryView = async function(req, res, next) {
     let nav = await utilities.getNav()
+    const classifications = await invModel.getClassifications();
     res.render("inventory/add-inventory", {
         title: "Add New Inventory Item",
         nav,
-        errors:null
-
+        errors:null,
+        classifications: classifications
     });
 };
 
 // Handle the form submission for adding a new inventory item
 invCont.addInventoryItem = async function(req, res, next) {
+      let nav = await utilities.getNav()
     inventoryValidation.addInventoryItemRules();
     inventoryValidation.checkValidationResults(req, res, next);
-    const itemName = req.body.itemName;
-    const itemPrice = req.body.itemPrice;
-    req.flash('success', 'Inventory item added successfully');
-    res.redirect('/inv/');
+    const success = await invModel.addInventory(req.body.classificationId, req.body.itemName, req.body.price);
+    successMessage = `${req.body.itemName} has been added successfully with a price of ${req.body.price}`;
+    req.flash('success', successMessage); 
+    res.redirect('/inv/'); 
 };
-
