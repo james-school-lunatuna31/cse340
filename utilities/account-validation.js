@@ -69,4 +69,20 @@ validate.checkRegData = async (req, res, next) => {
     next()
   }
   
+  validate.loginRules = () => {
+    return [
+      // Check if email is provided and is valid
+      body("username") // Make sure this matches the name attribute in your login form
+        .trim()
+        .isEmail()
+        .withMessage("Please provide a valid email."),
+      
+      // Check if password is provided
+      body("password")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Please provide a password."),
+    ]
+  }
+
   module.exports = validate
