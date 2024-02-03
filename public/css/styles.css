@@ -324,6 +324,11 @@ footer p{
     margin-bottom:32px;
   }
 
+  .required::after {
+    content: " *";
+    color:red;
+  }
+
   #inv-display {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
