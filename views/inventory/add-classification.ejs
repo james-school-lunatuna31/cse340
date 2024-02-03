@@ -1,0 +1,24 @@
+<h1>Add New Classification</h1>
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+<form action="/inv/classification" method="post">
+  <label for="classificationName">Classification Name:</label>
+  <input
+    type="text"
+    id="classificationName"
+    name="classificationName"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+    oninput="validateInput(this)"
+    required
+    pattern="^\S+$"
+    value="<%locals.classificationName%>"
+  />
+  <input type="submit" value="Add Classification" />
+</form>
+<script src="/js/form-validation.js"></script>

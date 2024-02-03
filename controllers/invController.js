@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const inventoryValidation = require('../utilities/inventory-validation');
 
 const invCont = {}
 
@@ -15,7 +16,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
   res.render("./inventory/classification", {
     title: className + " vehicles",
     nav,
-    grid,
+    grid
   })
 }
 
@@ -35,4 +36,59 @@ invCont.buildByInventoryId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Show management view
+ * ************************** */
+invCont.showManagementView = async function(req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("inventory/management", {
+        title: "Inventory Management",
+        nav,
+        errors:null
+    });
+
+};
+
 module.exports = invCont
+
+// Render the Add New Classification view
+invCont.showAddClassificationView = async function(req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("inventory/add-classification", {
+        title: "Add New Classification",
+        nav,
+        errors:null
+
+    });
+};
+
+// Handle the form submission for adding a new classification
+invCont.addClassification = async function(req, res, next) {
+    inventoryValidation.addClassificationRules();
+    inventoryValidation.checkValidationResults(req, res, next);
+    const classificationName = req.body.classificationName;
+    req.flash('success', 'Classification added successfully');
+    res.redirect('/inv/');
+};
+
+// Render the Add New Inventory Item view
+invCont.showAddInventoryView = async function(req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("inventory/add-inventory", {
+        title: "Add New Inventory Item",
+        nav,
+        errors:null
+
+    });
+};
+
+// Handle the form submission for adding a new inventory item
+invCont.addInventoryItem = async function(req, res, next) {
+    inventoryValidation.addInventoryItemRules();
+    inventoryValidation.checkValidationResults(req, res, next);
+    const itemName = req.body.itemName;
+    const itemPrice = req.body.itemPrice;
+    req.flash('success', 'Inventory item added successfully');
+    res.redirect('/inv/');
+};
+

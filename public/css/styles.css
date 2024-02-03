@@ -336,4 +336,19 @@ footer p{
   #inv-display li{
     height: 100%;
   }
+
+  .notice {
+    color:red;
+    list-style-type: none;
+
+  }
+.notice li::before {
+  content: "* ";
+}
+.valid {
+  background-color: rgb(135, 205, 135);
+}
+.invalid {
+  background-color: rgb(210, 152, 152);
+}
 }
