@@ -297,7 +297,20 @@ footer p{
   align-items: center;
   margin-top: 1rem;
 }
+.notice {
+  color:red;
+  list-style-type: none;
 
+}
+.notice li::before {
+content: "* ";
+}
+.valid {
+background-color: rgb(135, 205, 135);
+}
+.invalid {
+background-color: rgb(210, 152, 152);
+}
 @media (min-width: 1024px) {
   body {
     background: url('../images/site/checkerboard.jpg');
@@ -337,18 +350,5 @@ footer p{
     height: 100%;
   }
 
-  .notice {
-    color:red;
-    list-style-type: none;
 
-  }
-.notice li::before {
-  content: "* ";
-}
-.valid {
-  background-color: rgb(135, 205, 135);
-}
-.invalid {
-  background-color: rgb(210, 152, 152);
-}
 }

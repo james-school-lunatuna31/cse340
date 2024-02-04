@@ -21,7 +21,7 @@ router.post("/classification", inventoryValidation.addClassificationRules(), inv
 router.get("/add-inventory", utilities.handleErrors(invController.showAddInventoryView));
 
 // Route to handle the form submission for adding a new inventory item
-router.post("/inventory", inventoryValidation.addInventoryItemRules(), inventoryValidation.checkValidationResults, utilities.handleErrors(invController.addInventoryItem));
+router.post("/add-inventory", inventoryValidation.addInventoryItemRules(), inventoryValidation.checkValidationResults, utilities.handleErrors(invController.addInventoryItem));
 
 // Route to handle the form submission for adding a new inventory item
 router.get("/", utilities.handleErrors(invController.showManagementView));

@@ -82,17 +82,18 @@ invCont.showAddInventoryView = async function(req, res, next) {
         title: "Add New Inventory Item",
         nav,
         errors:null,
-        classifications: classifications
+        classifications: classifications.rows
     });
 };
 
 // Handle the form submission for adding a new inventory item
 invCont.addInventoryItem = async function(req, res, next) {
+  
       let nav = await utilities.getNav()
     inventoryValidation.addInventoryItemRules();
     inventoryValidation.checkValidationResults(req, res, next);
-    const success = await invModel.addInventory(req.body.classificationId, req.body.itemName, req.body.price);
+    await invModel.addInventoryItem(req.body);
     successMessage = `${req.body.itemName} has been added successfully with a price of ${req.body.price}`;
     req.flash('success', successMessage); 
-    res.redirect('/inv/'); 
+    res.redirect('/inv/management'); // Redirect to the management page or another appropriate page
 };

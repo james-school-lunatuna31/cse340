@@ -6,105 +6,109 @@
   <% }) %>
 </ul>
 <% } %>
-<form action="/inv/inventory" method="post" id="addInventoryForm">
-  <label for="classificationId">Classification:</label>
-  <select id="classificationId" name="classificationId" required>
+<form action="/inv/add-inventory" method="post" id="addInventoryForm">
+  <label for="classification_id">Classification:</label>
+  <select id="classification_id" name="classification_id" required>
     <% classifications.forEach(function(classification) { %>
     <option value="<%= classification.classification_id %>">
       <%= classification.classification_name %>
     </option>
     <% }); %>
   </select>
-  <label for="itemName">Item Name:</label>
+  <label for="inv_make">Make:</label>
   <input
     type="text"
-    id="itemName"
-    name="itemName"
+    id="inv_make"
+    name="inv_make"
     required
+    value="TEST"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
-  <label for="itemPrice">Item Price:</label>
+  <label for="inv_model">Model:</label>
+  <input
+    type="text"
+    id="inv_model"
+    name="inv_model"
+    required
+    value="TEST"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_year">Year:</label>
   <input
     type="number"
-    id="itemPrice"
-    name="itemPrice"
-    required
-    min="0.01"
-    step="any"
-    oninput="validateInput(this)"
-    onfocus="validateInput(this)"
-    onblur="validateInput(this)"
-  />
-  <label for="make">Make:</label>
-  <input
-    type="text"
-    id="make"
-    name="make"
-    required
-    oninput="validateInput(this)"
-    onfocus="validateInput(this)"
-    onblur="validateInput(this)"
-  />
-  <label for="model">Model:</label>
-  <input
-    type="text"
-    id="model"
-    name="model"
-    required
-    oninput="validateInput(this)"
-    onfocus="validateInput(this)"
-    onblur="validateInput(this)"
-  />
-  <label for="year">Year:</label>
-  <input
-    type="number"
-    id="year"
-    name="year"
+    id="inv_year"
+    name="inv_year"
     required
     min="1900"
     max="<%= new Date().getFullYear() %>"
+    value="2020"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
-  <label for="description">Description:</label>
+  <label for="inv_description">Description:</label>
   <textarea
-    id="description"
-    name="description"
+    id="inv_description"
+    name="inv_description"
     required
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
-  ></textarea>
-  <label for="thumbnail">Thumbnail (optional):</label>
-  <input type="text" id="thumbnail" name="thumbnail" />
-  <label for="color">Color:</label>
+  >
+TEST</textarea
+  >
+  <label for="inv_thumbnail">Thumbnail (required):</label>
   <input
     type="text"
-    id="color"
-    name="color"
+    id="inv_thumbnail"
+    name="inv_thumbnail"
+    required
+    value="TEST"
+  />
+  <label for="inv_color">Color:</label>
+  <input
+    type="text"
+    id="inv_color"
+    name="inv_color"
     required
     pattern="[A-Za-z]+"
+    value="TEST"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
-  <label for="miles">Miles:</label>
+  <label for="inv_miles">Miles:</label>
   <input
     type="number"
-    id="miles"
-    name="miles"
+    id="inv_miles"
+    name="inv_miles"
     required
     min="0"
     step="1"
+    value="2020"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
-  <label for="img">Image (optional):</label>
-  <input type="text" id="img" name="img" />
+  <label for="inv_price">Item Price:</label>
+  <input
+    type="number"
+    id="inv_price"
+    name="inv_price"
+    required
+    min="0.01"
+    step="any"
+    value="2020"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_image">Image (required):</label>
+  <input type="text" id="inv_image" name="inv_image" required value="TEST" />
   <input type="submit" value="Add Inventory Item" />
 </form>
 <script src="/js/form-validation.js"></script>

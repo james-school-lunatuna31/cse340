@@ -62,19 +62,36 @@ async function addClassification(classificationName) {
 }
 
 /* ***************************
- *  Add a new inventory item to the database
+ *  Insert a new inventory item into the database
  * ************************** */
-async function addInventory(classification_id, item_name, quantity) {
-  try {
-    const result = await pool.query(
-      "INSERT INTO public.inventory (classification_id, item_name, quantity) VALUES ($1, $2, $3) RETURNING *",
-      [classification_id, item_name, quantity]
-    );
-    return result.rows[0]; // Return the inserted inventory item
-  } catch (error) {
-    console.error("Error adding inventory: " + error);
-    throw error; // Rethrow the error for the caller to handle
-  }
+async function addInventoryItem(formInput) {
+  console.log(formInput);
+    const query = `
+        INSERT INTO public.inventory (
+            classification_id, inv_make, inv_model, inv_year, 
+            inv_description, inv_thumbnail, inv_color, inv_miles, inv_price, inv_image
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `;
+
+    const values = [
+        formInput.classification_id,
+        formInput.inv_make,
+        formInput.inv_model,
+        formInput.inv_year,
+        formInput.inv_description,
+        formInput.inv_thumbnail,
+        formInput.inv_color,
+        formInput.inv_miles,
+        formInput.inv_price,
+        formInput.inv_image
+    ];
+
+    try {
+        await pool.query(query, values);
+        console.log("Inventory item inserted successfully.");
+    } catch (error) {
+        console.error("Error inserting inventory item:", error);
+    }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventory};
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventoryItem};
