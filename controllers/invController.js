@@ -60,20 +60,17 @@ invCont.showAddClassificationView = async function(req, res, next) {
         title: "Add New Classification",
         nav,
         errors:null
-
     });
 };
 
 // Handle the form submission for adding a new classification
 invCont.addClassification = async function(req, res, next) {
   let nav = await utilities.getNav();
-  classificationValidation.addClassificationRules();
-  classificationValidation.checkValidationResults(req, res, next);
-  const success = await invModel.addClassification(req.body.classificationName);
-  let successMessage = success + " has been added successfully"; 
-  req.flash('success', successMessage); 
+  await invModel.addClassification(req.body.classificationName);
+  let view = "inventory/add-classification";
+  console.warn("I WARN YOU !")
+  res.redirect("/inv")
 
-  res.redirect('/inv'); 
 };
 
 // Render the Add New Inventory Item view
@@ -92,11 +89,7 @@ invCont.showAddInventoryView = async function(req, res, next) {
 invCont.addInventoryItem = async function(req, res, next) {
   
       let nav = await utilities.getNav()
-    inventoryValidation.addInventoryItemRules();
-    inventoryValidation.checkValidationResults(req, res, next);
     await invModel.addInventoryItem(req.body);
-    successMessage = `${req.body.itemName} has been added successfully with a price of ${req.body.price}`;
-    req.flash('success', successMessage); 
     res.redirect("/inv")
 
 

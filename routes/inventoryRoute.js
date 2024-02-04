@@ -16,13 +16,13 @@ router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByI
 router.get("/add-classification", utilities.handleErrors(invController.showAddClassificationView));
 
 // Route to handle the form submission for adding a new classification
-router.post("/classification", classificationValidation.addClassificationRules(), classificationValidation.checkValidationResults, utilities.handleErrors(invController.addClassification)); // Use classificationValidation
+router.post("/add-classification", classificationValidation.addClassificationRules(), classificationValidation.checkValidationResults, utilities.handleErrors(invController.addClassification)); // Use classificationValidation
 
 // Route to display the form for adding a new inventory item
 router.get("/add-inventory", utilities.handleErrors(invController.showAddInventoryView));
 
 // Route to handle the form submission for adding a new inventory item
-router.post("/", inventoryValidation.addInventoryItemRules(), inventoryValidation.checkValidationResults, utilities.handleErrors(invController.addInventoryItem)); // Corrected the route for adding a new inventory item
+router.post("/add-inventory", inventoryValidation.addInventoryItemRules(), inventoryValidation.checkValidationResults, utilities.handleErrors(invController.addInventoryItem)); // Corrected the route for adding a new inventory item
 
 // Route to display the inventory management view
 router.get("/", utilities.handleErrors(invController.showManagementView));
