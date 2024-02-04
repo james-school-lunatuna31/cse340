@@ -67,10 +67,9 @@ invCont.showAddClassificationView = async function(req, res, next) {
 invCont.addClassification = async function(req, res, next) {
   let nav = await utilities.getNav();
   await invModel.addClassification(req.body.classificationName);
-  let view = "inventory/add-classification";
-  console.warn("I WARN YOU !")
-  res.redirect("/inv")
-
+  req.flash('success', 'Inventory item added successfully.'); 
+  req.flash('info', 'Redirecting to inventory.');
+  res.redirect("/inv");
 };
 
 // Render the Add New Inventory Item view
@@ -91,6 +90,4 @@ invCont.addInventoryItem = async function(req, res, next) {
       let nav = await utilities.getNav()
     await invModel.addInventoryItem(req.body);
     res.redirect("/inv")
-
-
 };
