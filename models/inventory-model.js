@@ -50,6 +50,16 @@ async function addClassification(classificationName) {
     return;
   }
   try {
+    // Check if the classification already exists
+    const existing = await pool.query(
+      "SELECT * FROM public.classification WHERE classification_name = $1",
+      [classificationName]
+    );
+    if (existing.rows.length > 0) {
+      // Classification already exists
+      return "Classification already exists";
+    }
+
     const result = await pool.query(
       "INSERT INTO public.classification (classification_name) VALUES ($1) RETURNING *",
       [classificationName]
@@ -94,4 +104,15 @@ async function addInventoryItem(formInput) {
     }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventoryItem};
+/* ***************************
+ *  Check if a classification already exists in the database
+ * ************************** */
+async function checkExistingClassification(classificationName) {
+  const existing = await pool.query(
+    "SELECT * FROM public.classification WHERE classification_name = $1",
+    [classificationName]
+  );
+  return existing.rows.length > 0;
+}
+
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventoryItem, checkExistingClassification};

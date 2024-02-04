@@ -1,7 +1,9 @@
 function validateInput(inputElement) {
     let isValid = true; 
 
-    if (inputElement.id === 'inv_make' || inputElement.id === 'inv_model' || inputElement.id === 'inv_description' || inputElement.id === 'inv_image' || inputElement.id === 'inv_thumbnail') {
+    if (inputElement.id === 'classificationName') {
+      isValid = /^\S*$/.test(inputElement.value);
+    } else if (inputElement.id === 'inv_make' || inputElement.id === 'inv_model' || inputElement.id === 'inv_description' || inputElement.id === 'inv_image' || inputElement.id === 'inv_thumbnail') {
       isValid = inputElement.value.trim() !== ''; 
     } else if (inputElement.id === 'inv_price') {
       isValid = inputElement.value > 0; 

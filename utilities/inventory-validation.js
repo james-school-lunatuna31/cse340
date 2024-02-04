@@ -52,28 +52,19 @@ validate.addInventoryItemRules = () => {
     ];
 };
 
-// Validation rules for adding a new classification
-validate.addClassificationRules = () => {
-    return [
-        body("classificationName")
-        // I want this to be annoying. No spaces, no trim
-            .matches(/^\S*$/)
-            .withMessage("Classification name cannot contain a space.")
-    ];
-};
-
 // Function to check validation results and return errors or continue
 validate.checkValidationResults = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         let nav = await utilities.getNav();
         // Determine the appropriate view based on the route
-        let view = req.path.includes('inventory') ? 'inventory/add-inventory' : 'inventory/add-classification';
-        let title = view.includes('add-inventory') ? 'Add New Inventory Item' : 'Add New Classification';
+        let view = "inventory/add-inventory"
+        classifications = await invModel.getClassifications();
         res.render(view, {
-            title: title,
+            title: "Add New Inventory Item",
             errors: errors,
             nav,
+            classifications: classifications.rows,
             classification_id: req.body.classification_id,
             inv_make: req.body.inv_make,
             inv_model: req.body.inv_model,
@@ -91,3 +82,4 @@ validate.checkValidationResults = async (req, res, next) => {
 };
 
 module.exports = validate;
+

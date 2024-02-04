@@ -1,6 +1,8 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 const inventoryValidation = require('../utilities/inventory-validation');
+const classificationValidation = require('../utilities/classification-validation');
+
 
 const invCont = {}
 
@@ -65,13 +67,13 @@ invCont.showAddClassificationView = async function(req, res, next) {
 // Handle the form submission for adding a new classification
 invCont.addClassification = async function(req, res, next) {
   let nav = await utilities.getNav();
-  inventoryValidation.addClassificationRules();
-  inventoryValidation.checkValidationResults(req, res, next);
+  classificationValidation.addClassificationRules();
+  classificationValidation.checkValidationResults(req, res, next);
   const success = await invModel.addClassification(req.body.classificationName);
   let successMessage = success + " has been added successfully"; 
   req.flash('success', successMessage); 
 
-  res.redirect('/inv/'); 
+  res.redirect('/inv'); 
 };
 
 // Render the Add New Inventory Item view
@@ -95,5 +97,7 @@ invCont.addInventoryItem = async function(req, res, next) {
     await invModel.addInventoryItem(req.body);
     successMessage = `${req.body.itemName} has been added successfully with a price of ${req.body.price}`;
     req.flash('success', successMessage); 
-    res.redirect('/inv/management'); // Redirect to the management page or another appropriate page
+    res.redirect("/inv")
+
+
 };

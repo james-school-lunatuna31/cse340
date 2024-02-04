@@ -6,7 +6,7 @@
   <% }) %>
 </ul>
 <% } %>
-<form action="/inv/add-inventory" method="post" id="addInventoryForm">
+<form action="/inv" method="post" id="addInventoryForm">
   <label for="classification_id">Classification:</label>
   <select id="classification_id" name="classification_id" required>
     <% classifications.forEach(function(classification) { %>
@@ -21,7 +21,7 @@
     id="inv_make"
     name="inv_make"
     required
-    value="TEST"
+    value="<%locals.inv_make%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -32,7 +32,7 @@
     id="inv_model"
     name="inv_model"
     required
-    value="TEST"
+    value="<%locals.inv_model%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -45,7 +45,7 @@
     required
     min="1900"
     max="<%= new Date().getFullYear() %>"
-    value="2020"
+    value="<%locals.inv_year%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -59,7 +59,7 @@
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   >
-TEST</textarea
+<%locals.inv_description%></textarea
   >
   <label for="inv_thumbnail">Thumbnail (required):</label>
   <input
@@ -67,7 +67,7 @@ TEST</textarea
     id="inv_thumbnail"
     name="inv_thumbnail"
     required
-    value="TEST"
+    value="<%locals.inv_thumbnail%>"
   />
   <label for="inv_color">Color:</label>
   <input
@@ -76,7 +76,7 @@ TEST</textarea
     name="inv_color"
     required
     pattern="[A-Za-z]+"
-    value="TEST"
+    value="<%locals.inv_color%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -89,7 +89,7 @@ TEST</textarea
     required
     min="0"
     step="1"
-    value="2020"
+    value="<%locals.inv_miles%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -102,13 +102,19 @@ TEST</textarea
     required
     min="0.01"
     step="any"
-    value="2020"
+    value="<%locals.inv_price%>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
   <label for="inv_image">Image (required):</label>
-  <input type="text" id="inv_image" name="inv_image" required value="TEST" />
+  <input
+    type="text"
+    id="inv_image"
+    name="inv_image"
+    required
+    value="<%locals.inv_image%>"
+  />
   <input type="submit" value="Add Inventory Item" />
 </form>
 <script src="/js/form-validation.js"></script>
