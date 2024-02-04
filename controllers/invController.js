@@ -86,8 +86,7 @@ invCont.showAddInventoryView = async function(req, res, next) {
 
 // Handle the form submission for adding a new inventory item
 invCont.addInventoryItem = async function(req, res, next) {
-  
-      let nav = await utilities.getNav()
+    let nav = await utilities.getNav()
     await invModel.addInventoryItem(req.body);
     res.redirect("/inv")
 };
