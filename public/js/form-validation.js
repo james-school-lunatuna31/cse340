@@ -3,7 +3,7 @@ function validateInput(inputElement) {
 
     if (inputElement.id === 'classificationName') {
       isValid = /^\S*$/.test(inputElement.value);
-    } else if (inputElement.id === 'inv_make' || inputElement.id === 'inv_model' || inputElement.id === 'inv_description' || inputElement.id === 'inv_image' || inputElement.id === 'inv_thumbnail') {
+    } else if (inputElement.id === 'inv_make' || inputElement.id === 'inv_model' || inputElement.id === 'inv_description') {
       isValid = inputElement.value.trim() !== ''; 
     } else if (inputElement.id === 'inv_price') {
       isValid = inputElement.value > 0; 
@@ -14,6 +14,9 @@ function validateInput(inputElement) {
       isValid = /^[A-Za-z]+$/.test(inputElement.value);
     } else if (inputElement.id === 'inv_miles') {
       isValid = /^\d+$/.test(inputElement.value); 
+    } else if (inputElement.id === 'inv_image' || inputElement.id === 'inv_thumbnail'){
+      console.log(inputElement.value)
+      isValid = /\/images\/vehicles\/([^\/]+)\.([^\/]+)/.test(inputElement.value) && inputElement.value.trim() !== '';
     }
 
     if (inputElement === document.activeElement) { 

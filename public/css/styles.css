@@ -330,6 +330,64 @@ li.flash-item {
   list-style-type: none;
   padding:8px 0px 0px 0px
 }
+
+#addInventoryForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 600px;
+  margin: auto;
+  background-color: #2FAFD1;
+  padding:8px;
+  border:2px black solid;
+  border-radius:10px
+}
+
+#addInventoryForm label {
+  cursor: pointer;
+  display: block;
+  margin-bottom: 2px;
+}
+
+#addInventoryForm input,
+#addInventoryForm select,
+#addInventoryForm textarea {
+  min-height: 44px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 0;
+}
+
+#addInventoryForm input[type="submit"] {
+  background-color: #005c75;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#addInventoryForm input[type="submit"]:hover {
+  background-color: #004a5e;
+}
+
+#addInventoryForm h2{
+  margin:0px;
+  padding:0px;
+    text-align: center;
+
+}
+#addInventoryForm p{
+  margin:0px;
+  padding:0px;
+  text-decoration: underline;
+  text-align: center;
+
+  
+}
 @media (min-width: 1024px) {
   body {
     background: url('../images/site/checkerboard.jpg');
