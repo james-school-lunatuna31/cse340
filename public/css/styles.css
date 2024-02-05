@@ -311,6 +311,24 @@ background-color: rgb(135, 205, 135);
 .invalid {
 background-color: rgb(210, 152, 152);
 }
+
+ul.flash-container {
+  background: radial-gradient(#fcf4b8, #fff8c4);
+  border: 2px solid #f1e271;
+  border-radius: 4px;
+  padding:8px;
+}
+
+ul.flash-container h3 {
+  margin-top: 0px;
+  margin-bottom:0px;
+  padding-top:0px;
+}
+
+li.flash-item {
+  list-style-type: none;
+  padding:8px 0px 0px 0px
+}
 @media (min-width: 1024px) {
   body {
     background: url('../images/site/checkerboard.jpg');

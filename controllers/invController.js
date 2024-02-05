@@ -44,9 +44,10 @@ invCont.buildByInventoryId = async function (req, res, next) {
 invCont.showManagementView = async function(req, res, next) {
     let nav = await utilities.getNav()
     res.render("inventory/management", {
-        title: "Inventory Management",
+        title: "Management Console",
         nav,
-        errors:null
+        errors:null,
+        messages: ""
     });
 
 };
@@ -67,9 +68,13 @@ invCont.showAddClassificationView = async function(req, res, next) {
 invCont.addClassification = async function(req, res, next) {
   let nav = await utilities.getNav();
   await invModel.addClassification(req.body.classificationName);
-  req.flash('success', 'Inventory item added successfully.'); 
-  req.flash('info', 'Redirecting to inventory.');
-  res.redirect("/inv");
+  req.flash("success","Success")
+  req.flash('success', 'Classification added successfully.'); 
+  res.render("inventory/management",{
+    title: "Management Console",
+    nav,
+    messages: req.flash("success")
+  });
 };
 
 // Render the Add New Inventory Item view
@@ -88,5 +93,11 @@ invCont.showAddInventoryView = async function(req, res, next) {
 invCont.addInventoryItem = async function(req, res, next) {
     let nav = await utilities.getNav()
     await invModel.addInventoryItem(req.body);
-    res.redirect("/inv")
+    req.flash("success","Success")
+    req.flash('success', 'Inventory item added successfully.'); 
+    res.render("inventory/management",{
+      title: "Management Console",
+      nav,
+      messages: req.flash("success")
+    });
 };

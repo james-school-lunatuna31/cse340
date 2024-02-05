@@ -1,5 +1,13 @@
 <h1>Inventory Management</h1>
-
+<% if (messages.length > 0) { %>
+<ul class="flash-container">
+  <h3><%= messages[0] %></h3>
+  <% if (messages.length > 1) { %> <%
+  messages.slice(1).forEach(function(message) { %>
+  <li class="flash-item"><%= message %></li>
+  <% }); %>
+</ul>
+<% } %> <% } %>
 <ul>
   <li><a href="/inv/add-classification">Add New Classification</a></li>
   <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
