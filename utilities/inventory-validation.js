@@ -43,12 +43,12 @@ validate.addInventoryItemRules = () => {
             .withMessage("Item price must be greater than 0."),
         body("inv_thumbnail")
             .trim()
-            .isLength({ min: 1 })
-            .withMessage("Thumbnail cannot be empty."),
+            .matches(/\/images\/vehicles\/[^\/]+-tn\.[^\/]+/)
+            .withMessage("Thumbnail must match the required pattern and not be blank."),
         body("inv_image")
             .trim()
-            .isLength({ min: 1 })
-            .withMessage("Image cannot be empty."),
+            .matches(/\/images\/vehicles\/([^\/]+)\.([^\/]+)/)
+            .withMessage("Image must match the required pattern and not be blank."),
     ];
 };
 

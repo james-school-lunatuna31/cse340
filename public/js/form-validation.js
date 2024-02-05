@@ -14,9 +14,11 @@ function validateInput(inputElement) {
       isValid = /^[A-Za-z]+$/.test(inputElement.value);
     } else if (inputElement.id === 'inv_miles') {
       isValid = /^\d+$/.test(inputElement.value); 
-    } else if (inputElement.id === 'inv_image' || inputElement.id === 'inv_thumbnail'){
-      console.log(inputElement.value)
+    } else if (inputElement.id === 'inv_image'){
       isValid = /\/images\/vehicles\/([^\/]+)\.([^\/]+)/.test(inputElement.value) && inputElement.value.trim() !== '';
+    } else if (inputElement.id === 'inv_thumbnail'){
+      isValid = /\/images\/vehicles\/[^\/]+-tn\.[^\/]+/.test(inputElement.value) && inputElement.value.trim() !== '';
+
     }
 
     if (inputElement === document.activeElement) { 
