@@ -21,6 +21,7 @@ async function buildLogin(req, res, next) {
       title: "Register a New Account",
       nav,
       errors: null,
+      messages:""
     })
   }
 /* ****************************************
@@ -35,11 +36,13 @@ try {
   // regular password and cost (salt is generated automatically)
   hashedPassword = await bcrypt.hash(account_password, 14)
 } catch (error) {
-  req.flash("notice", 'Sorry, there was an error processing the registration.')
+  req.flash("Notice","Error")
+  req.flash("Notice", 'Sorry, there was an error processing the registration.')
   res.status(500).render("account/register", {
     title: "Registration",
     nav,
     errors: null,
+    messages:req.flash("Notice")
   })
 }
     const regResult = await accountModel.registerAccount(
@@ -51,21 +54,27 @@ try {
   
     if (regResult) {
       req.flash(
-        "notice",
-        `Congratulations, you\'re registered ${account_firstname}. Please log in.`
+        "Notice",
+        `Success`
+      )
+      req.flash(
+        "Notice",
+        `Congratulations, you\'re registered *${account_firstname}*. Please log in.`
       )
       res.status(201).render("account/login", {
         title: "Login",
         nav,
-errors: null,
+        errors: null,
+        messages: req.flash("Notice")
       })
     } else {
-      req.flash("notice", "Sorry, the registration failed.")
+      req.flash("Notice", "Error Registering Account")
+      req.flash("Notice", "Sorry, the registration failed.")
       res.status(501).render("account/register", {
         title: "Registration",
         nav,
         errors: null,
-
+        messages: req.flash("Notice")
       })
     }
   }

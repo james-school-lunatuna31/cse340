@@ -63,6 +63,7 @@ validate.checkRegData = async (req, res, next) => {
         account_firstname,
         account_lastname,
         account_email,
+        messages: ""
       })
       return
     }

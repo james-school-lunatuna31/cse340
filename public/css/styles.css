@@ -317,6 +317,7 @@ ul.flash-container {
   border: 2px solid #f1e271;
   border-radius: 4px;
   padding:8px;
+  margin:8px;
 }
 
 ul.flash-container h3 {
