@@ -66,10 +66,10 @@ invCont.showAddClassificationView = async function(req, res, next) {
 
 // Handle the form submission for adding a new classification
 invCont.addClassification = async function(req, res, next) {
-  let nav = await utilities.getNav();
   await invModel.addClassification(req.body.classificationName);
   req.flash("success","Success")
   req.flash('success', 'Classification added successfully.'); 
+  let nav = await utilities.getNav();
   res.render("inventory/management",{
     title: "Management Console",
     nav,
