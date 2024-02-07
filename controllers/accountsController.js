@@ -13,7 +13,7 @@ async function buildLogin(req, res, next) {
       title: "Login",
       nav,
       errors: null,
-      messages: ""
+      messages: req.flash("notice") || ""
     })
   }
   async function buildRegister(req, res, next) {
@@ -114,10 +114,32 @@ async function accountLogin(req, res) {
 
  async function showManagementView(req, res){
   let nav = await utilities.getNav()
+
+  const token = req.cookies.jwt;
+  let accountData;
+
+  if (token) {
+    try {
+      // Decode the token to get the payload
+      accountData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    } catch (error) {
+      // Handle error (token verification failed, token expired, etc.)
+      console.error("Token verification failed:", error);
+      return res.status(403).send("Access Forbidden");
+    }
+  }
+
+  // Ensure accountData is defined and has account_firstname
+  if (!accountData || !accountData.account_firstname) {
+    return res.status(403).send("Access Forbidden");
+  }
+
+  let greeting = "Welcome " + accountData.account_firstname; 
   res.render("account/management",{
     title: "Account Manager",
     nav,
-    messages: ""
+    messages: "",
+    greeting: greeting
   });
- }
+}
   module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, showManagementView}
