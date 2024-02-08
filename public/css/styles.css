@@ -388,6 +388,20 @@ li.flash-item {
 
   
 }
+
+#classificationList {
+  margin:4px;
+  padding: 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+#classificationList:hover,
+#classificationList:focus {
+  border-color: #888;
+}
+
 @media (min-width: 1024px) {
   body {
     background: url('../images/site/checkerboard.jpg');

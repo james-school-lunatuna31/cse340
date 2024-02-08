@@ -25,6 +25,7 @@ router.get("/add-inventory", utilities.handleErrors(invController.showAddInvento
 router.post("/add-inventory", inventoryValidation.addInventoryItemRules(), inventoryValidation.checkValidationResults, utilities.handleErrors(invController.addInventoryItem)); // Corrected the route for adding a new inventory item
 
 // Route to display the inventory management view
-router.get("/", utilities.handleErrors(invController.showManagementView));
+router.get("/", utilities.checkLogin, utilities.handleErrors(invController.showManagementView));
 
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 module.exports = router; 

@@ -18,6 +18,7 @@ router.post(
   )
   // Route to build register
 router.get("/register", utilities.handleErrors(accounts.buildRegister));
+
 // Process the login attempt 
 router.post("/login",
           regValidate.loginRules(),
