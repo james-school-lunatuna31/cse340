@@ -28,4 +28,9 @@ router.post("/add-inventory", inventoryValidation.addInventoryItemRules(), inven
 router.get("/", utilities.checkLogin, utilities.handleErrors(invController.showManagementView));
 
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+// Route to display the form for editing an inventory item
+router.get("/edit/:inv_id", utilities.handleErrors(invController.showEditInventoryView));
+
+
 module.exports = router; 

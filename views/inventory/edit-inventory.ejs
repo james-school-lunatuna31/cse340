@@ -1,0 +1,146 @@
+<h1>Edit Inventory Item</h1>
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+<form action="/inv/update" method="post" id="addInventoryForm">
+  <h2>Edit Inventory Item Form</h2>
+  <p>Note: All fields are required</p>
+  <label for="classification_id">Classification:</label>
+  <select
+    class="required-input"
+    id="classification_id"
+    name="classification_id"
+    required
+  >
+    <% classifications.forEach(function(classification) { %>
+    <option value="<%= classification.classification_id %>" <%= classification.classification_id == selectedClassificationId ? 'selected' : '' %>>
+      <%= classification.classification_name %>
+    </option>
+    <% }); %>
+  </select>
+  <label for="inv_make">Make:</label>
+  <input
+    type="text"
+    id="inv_make"
+    name="inv_make"
+    class="required-input"
+    placeholder="Honda"
+    required
+    value="<%= inv_make %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_model">Model:</label>
+  <input
+    type="text"
+    id="inv_model"
+    name="inv_model"
+    class="required-input"
+    placeholder="Accord"
+    required
+    value="<%= inv_model %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_year">Year:</label>
+  <input
+    type="number"
+    id="inv_year"
+    name="inv_year"
+    class="required-input"
+    placeholder="2019"
+    required
+    min="1900"
+    max="<%= new Date().getFullYear() %>"
+    value="<%= inv_year %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_description">Description:</label>
+  <textarea
+    id="inv_description"
+    name="inv_description"
+    class="required-input"
+    placeholder="lorem ipsum dolor sit amet"
+    required
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  ><%= inv_description %></textarea
+  >
+  <label for="inv_thumbnail">Thumbnail (required):</label>
+  <input
+    type="text"
+    id="inv_thumbnail"
+    name="inv_thumbnail"
+    class="required-input"
+    placeholder="/images/vehicles/*-tn.*"
+    required
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+    value="<%= inv_thumbnail %>"
+  />
+  <label for="inv_color">Color:</label>
+  <input
+    type="text"
+    id="inv_color"
+    name="inv_color"
+    required
+    placeholder="Silver"
+    pattern="[A-Za-z]+"
+    value="<%= inv_color %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_miles">Miles:</label>
+  <input
+    type="number"
+    id="inv_miles"
+    name="inv_miles"
+    required
+    min="0"
+    placeholder="99000"
+    step="1"
+    value="<%= inv_miles %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_price">Item Price:</label>
+  <input
+    type="number"
+    id="inv_price"
+    name="inv_price"
+    required
+    min="0.01"
+    step="any"
+    placeholder="4000"
+    value="<%= inv_price %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <label for="inv_image">Image (required):</label>
+  <input
+    type="text"
+    id="inv_image"
+    name="inv_image"
+    required
+    placeholder="/images/vehicles/*.*"
+    value="<%= inv_image %>"
+    oninput="validateInput(this)"
+    onfocus="validateInput(this)"
+    onblur="validateInput(this)"
+  />
+  <input type="submit" value="Update Vehicle" />
+</form>
+<script src="/js/form-validation.js"></script>
