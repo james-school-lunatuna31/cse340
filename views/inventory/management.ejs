@@ -7,7 +7,9 @@
 <h2>Manage Inventory</h2>
 <p>Select an inventory item</p>
 <select id="classificationList">
+  <option value="default" selected disabled>Choose a selection</option>
   <% classifications.forEach(function(classification) { %>
+
   <option value="<%= classification.classification_id %>">
     <%= classification.classification_name %>
   </option>

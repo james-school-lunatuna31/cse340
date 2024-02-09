@@ -35,4 +35,11 @@ router.get("/edit/:inv_id", utilities.handleErrors(invController.showEditInvento
 // New route to handle the update inventory request with error handling
 router.post("/update/", inventoryValidation.newInventoryRules(), utilities.handleErrors(invController.updateInventory));
 
+// Route to display the delete confirmation view for an inventory item
+router.get("/delete/:inv_id", utilities.handleErrors(invController.showDeleteInventoryView));
+
+// Route to handle the deletion of an inventory item
+router.post("/delete/:inv_id", utilities.handleErrors(invController.deleteInventoryItem));
+
 module.exports = router; 
+

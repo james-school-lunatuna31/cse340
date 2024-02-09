@@ -150,4 +150,19 @@ async function updateInventory(
   }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventoryItem, checkExistingClassification, updateInventory};
+/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+async function deleteInventoryById (inv_id) {
+  try {
+    const sql = 'DELETE FROM inventory WHERE inv_id = $1';
+    const result = await pool.query(sql, [inv_id]);
+    return result.rowCount === 1;
+  } catch (error) {
+    console.error("Error deleting inventory item: " + error);
+    throw new Error("Delete Inventory Error");
+  }
+}
+
+
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addClassification, addInventoryItem, checkExistingClassification, updateInventory,deleteInventoryById };

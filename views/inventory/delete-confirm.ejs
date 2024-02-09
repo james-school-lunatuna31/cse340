@@ -1,0 +1,15 @@
+<h1>Delete Inventory Item</h1>
+<p>Confirm Deletion - The delete is permanent.</p>
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+<form action="/inv/delete/<%= inv_id %>" method="post" class="addInventoryForm">
+  <h2>Delete Inventory Item Form</h2>
+  <p>Note: This action cannot be undone</p>
+  <input type="submit" value="Delete Vehicle" />
+  <input type="hidden" name="inv_id" value="<%= inv_id %>" />
+</form>

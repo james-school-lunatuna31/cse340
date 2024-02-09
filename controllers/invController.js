@@ -68,13 +68,15 @@ invCont.showAddClassificationView = async function(req, res, next) {
 // Handle the form submission for adding a new classification
 invCont.addClassification = async function(req, res, next) {
   await invModel.addClassification(req.body.classificationName);
+  const classifications = await invModel.getClassifications()
   req.flash("success","Success")
   req.flash('success', 'Classification added successfully.'); 
   let nav = await utilities.getNav();
   res.render("inventory/management",{
     title: "Management Console",
     nav,
-    messages: req.flash("success")
+    messages: req.flash("success"),
+    classifications: classifications.rows
   });
 };
 
@@ -94,12 +96,15 @@ invCont.showAddInventoryView = async function(req, res, next) {
 invCont.addInventoryItem = async function(req, res, next) {
     let nav = await utilities.getNav()
     await invModel.addInventoryItem(req.body);
+    const classifications = await invModel.getClassifications();
     req.flash("success","Success")
     req.flash('success', 'Inventory item added successfully.'); 
     res.render("inventory/management",{
       title: "Management Console",
       nav,
-      messages: req.flash("success")
+      messages: req.flash("success"),
+      classifications: classifications.rows
+
     });
 };
 
@@ -207,4 +212,60 @@ invCont.updateInventory = async function (req, res, next) {
     })
   }
 }
+
+invCont.showDeleteInventoryView = async function(req, res, next) {
+    try {
+        const inv_id = req.params.inv_id;
+        let nav = await utilities.getNav();
+        const itemData = await invModel.getInventoryById(inv_id);
+        const vehicleName = itemData.inv_make + ' ' + itemData.inv_model;
+        res.render('inventory/delete-confirm', {
+            title: 'Delete ' + vehicleName,
+            nav,
+            inv_id: inv_id,
+            inv_make: itemData.inv_make,
+            inv_model: itemData.inv_model,
+            inv_year: itemData.inv_year,
+            inv_price: itemData.inv_price,
+            errors: null
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+invCont.deleteInventoryItem = async function(req, res, next) {
+  let nav = await utilities.getNav();
+    try {
+        const inv_id = parseInt(req.params.inv_id);
+        const deleteResult = await invModel.deleteInventoryById(inv_id);
+        const classifications = await invModel.getClassifications();
+
+        if (deleteResult) {
+          req.flash('notice', 'Success.');
+            req.flash('notice', 'Inventory item deleted successfully.');
+            res.render("inventory/management",{
+              title: "Management Console",
+              nav,
+              messages: req.flash("success"),
+              classifications: classifications.rows
+        
+            });
+        } else {
+            req.flash('error', 'Failed.');
+            req.flash('error', 'Failed to delete inventory item.');
+
+            res.render("inventory/management",{
+              title: "Management Console",
+              nav,
+              messages: req.flash("success"),
+              classifications: classifications.rows
+        
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = invCont
