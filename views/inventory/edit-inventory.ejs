@@ -6,7 +6,7 @@
   <% }) %>
 </ul>
 <% } %>
-<form action="/inv/update" method="post" id="addInventoryForm">
+<form action="/inv/update" method="post" id="updateForm">
   <h2>Edit Inventory Item Form</h2>
   <p>Note: All fields are required</p>
   <label for="classification_id">Classification:</label>
@@ -141,6 +141,10 @@
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
   />
-  <input type="submit" value="Update Vehicle" />
+  <input type="submit" value="Update Vehicle" disabled />
+  <input type="hidden" name="inv_id"
+  <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+  <% } %>>
 </form>
 <script src="/js/form-validation.js"></script>
+<script src="/js/inv-update.js"></script>

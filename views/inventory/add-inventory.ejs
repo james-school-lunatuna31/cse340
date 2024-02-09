@@ -17,7 +17,7 @@
     required
   >
     <% classifications.forEach(function(classification) { %>
-    <option value="<%= classification.classification_id %>">
+    <option value="<%= classification.classification_id %>" <%= locals.classification_id == classification.classification_id ? 'selected' : '' %>>
       <%= classification.classification_name %>
     </option>
     <% }); %>
@@ -30,7 +30,7 @@
     class="required-input"
     placeholder="Honda"
     required
-    value="<%locals.inv_make%>"
+    value="<%= locals.inv_make ? locals.inv_make : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -43,7 +43,7 @@
     class="required-input"
     placeholder="Accord"
     required
-    value="<%locals.inv_model%>"
+    value="<%= locals.inv_model ? locals.inv_model : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -58,7 +58,7 @@
     required
     min="1900"
     max="<%= new Date().getFullYear() %>"
-    value="<%locals.inv_year%>"
+    value="<%= locals.inv_year ? locals.inv_year : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -73,8 +73,7 @@
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
-  >
-<%locals.inv_description%></textarea
+  ><%= locals.inv_description ? locals.inv_description : '' %></textarea
   >
   <label for="inv_thumbnail">Thumbnail (required):</label>
   <input
@@ -87,7 +86,7 @@
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
-    value="<%locals.inv_thumbnail%>"
+    value="<%= locals.inv_thumbnail ? locals.inv_thumbnail : '' %>"
   />
   <label for="inv_color">Color:</label>
   <input
@@ -97,7 +96,7 @@
     required
     placeholder="Silver"
     pattern="[A-Za-z]+"
-    value="<%locals.inv_color%>"
+    value="<%= locals.inv_color ? locals.inv_color : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -111,7 +110,7 @@
     min="0"
     placeholder="99000"
     step="1"
-    value="<%locals.inv_miles%>"
+    value="<%= locals.inv_miles ? locals.inv_miles : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -125,7 +124,7 @@
     min="0.01"
     step="any"
     placeholder="4000"
-    value="<%locals.inv_price%>"
+    value="<%= locals.inv_price ? locals.inv_price : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"
@@ -137,7 +136,7 @@
     name="inv_image"
     required
     placeholder="/images/vehicles/*.*"
-    value="<%locals.inv_image%>"
+    value="<%= locals.inv_image ? locals.inv_image : '' %>"
     oninput="validateInput(this)"
     onfocus="validateInput(this)"
     onblur="validateInput(this)"

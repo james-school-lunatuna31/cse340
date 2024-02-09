@@ -52,6 +52,52 @@ validate.addInventoryItemRules = () => {
     ];
 };
 
+// New validation rules for updating an inventory item
+validate.newInventoryRules = () => {
+    return [
+        body("classification_id")
+            .trim()
+            .isNumeric()
+            .withMessage("Classification ID must be a number."),
+        body("inv_make")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Make cannot be empty."),
+        body("inv_model")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Model cannot be empty."),
+        body("inv_year")
+            .trim()
+            .isInt({ min: 1900, max: new Date().getFullYear() })
+            .withMessage("Year must be a valid year."),
+        body("inv_description")
+            .trim()
+            .isLength({ min: 1 })
+            .withMessage("Description cannot be empty."),
+        body("inv_color")
+            .trim()
+            .isAlpha()
+            .withMessage("Color must only contain letters."),
+        body("inv_miles")
+            .trim()
+            .isInt()
+            .withMessage("Miles must only contain numbers."),
+        body("inv_price")
+            .trim()
+            .isFloat({ min: 0.01 })
+            .withMessage("Item price must be greater than 0."),
+        body("inv_thumbnail")
+            .trim()
+            .matches(/\/images\/vehicles\/[^\/]+-tn\.[^\/]+/)
+            .withMessage("Thumbnail must match the required pattern and not be blank."),
+        body("inv_image")
+            .trim()
+            .matches(/\/images\/vehicles\/([^\/]+)\.([^\/]+)/)
+            .withMessage("Image must match the required pattern and not be blank."),
+    ];
+};
+
 // Function to check validation results and return errors or continue
 validate.checkValidationResults = async (req, res, next) => {
     const errors = validationResult(req);
@@ -60,6 +106,7 @@ validate.checkValidationResults = async (req, res, next) => {
         // Determine the appropriate view based on the route
         let view = "inventory/add-inventory"
         classifications = await invModel.getClassifications();
+        console.log(req.body)
         res.render(view, {
             title: "Add New Inventory Item",
             errors: errors,
@@ -82,4 +129,3 @@ validate.checkValidationResults = async (req, res, next) => {
 };
 
 module.exports = validate;
-

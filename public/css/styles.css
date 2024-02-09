@@ -331,7 +331,7 @@ li.flash-item {
   padding:8px 0px 0px 0px
 }
 
-#addInventoryForm {
+#addInventoryForm, #updateForm {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -342,8 +342,7 @@ li.flash-item {
   border:2px black solid;
   border-radius:10px
 }
-
-#addInventoryForm label {
+#addInventoryForm label, #updateForm label {
   cursor: pointer;
   display: block;
   margin-bottom: 2px;
@@ -351,7 +350,10 @@ li.flash-item {
 
 #addInventoryForm input,
 #addInventoryForm select,
-#addInventoryForm textarea {
+#addInventoryForm textarea,
+#updateForm input,
+#updateForm select,
+#updateForm textarea {
   min-height: 44px;
   padding: 10px;
   width: 100%;
@@ -361,7 +363,8 @@ li.flash-item {
   margin-top: 0;
 }
 
-#addInventoryForm input[type="submit"] {
+#addInventoryForm input[type="submit"],
+#updateForm input[type="submit"] {
   background-color: #005c75;
   color: white;
   font-weight: bold;
@@ -370,25 +373,22 @@ li.flash-item {
   margin-top: 10px;
 }
 
-#addInventoryForm input[type="submit"]:hover {
+#addInventoryForm input[type="submit"]:hover,
+#updateForm input[type="submit"]:hover {
   background-color: #004a5e;
 }
 
-#addInventoryForm h2{
+#addInventoryForm h2, #updateForm h2 {
   margin:0px;
   padding:0px;
-    text-align: center;
-
+  text-align: center;
 }
-#addInventoryForm p{
+#addInventoryForm p, #updateForm p {
   margin:0px;
   padding:0px;
   text-decoration: underline;
   text-align: center;
-
-  
 }
-
 #classificationList {
   margin:4px;
   padding: 8px;
