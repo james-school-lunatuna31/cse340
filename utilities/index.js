@@ -106,6 +106,27 @@ Util.checkJWTToken = (req, res, next) => {
  }
 
 /* ****************************************
+ * Middleware to check account type for admin access
+ **************************************** */
+Util.checkAccountTypeForAdminAccess = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        req.flash("notice", "Please log in.")
+        return res.redirect("/account/login")
+      } else if (decoded.accountType === "Employee" || decoded.accountType === "Admin") {
+        next()
+      } else {
+        req.flash("notice", "Access restricted to Employee or Admin accounts.")
+        return res.redirect("/account/login")
+      }
+    })
+  } else {
+    next()
+  }
+}
+
+/* ****************************************
  *  Check Login
  * ************************************ */
 Util.checkLogin = (req, res, next) => {

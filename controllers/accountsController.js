@@ -151,7 +151,54 @@ async function accountLogin(req, res) {
     title: "Account Manager",
     nav,
     messages: "",
-    greeting: greeting
+    greeting: greeting,
+    user: accountData, // Pass the user object to the view
+    clientIsLoggedIn: true // Ensure clientIsLoggedIn is passed to views
   });
 }
-  module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, showManagementView}
+
+// New functions for account update view and handling account updates and password changes
+async function showUpdateView(req, res) {
+  let nav = await utilities.getNav();
+  res.render("account/update", {
+    title: "Update Account",
+    nav,
+    errors: req.flash("errors"),
+    messages: req.flash("messages")
+  });
+}
+
+async function updateAccountInfo(req, res) {
+  const { firstName, lastName, email } = req.body;
+  try {
+    await accountModel.updateAccountInfo(req.user.id, firstName, lastName, email);
+    req.flash("messages", "Account information updated successfully.");
+    res.redirect("/account/update");
+  } catch (error) {
+    console.error("Error updating account info:", error);
+    req.flash("errors", "Failed to update account information.");
+    res.redirect("/account/update");
+  }
+}
+
+async function updatePassword(req, res) {
+  const { currentPassword, newPassword } = req.body;
+  try {
+    const accountData = await accountModel.getAccountById(req.user.id);
+    if (await bcrypt.compare(currentPassword, accountData.account_password)) {
+      const hashedPassword = await bcrypt.hash(newPassword, 14);
+      await accountModel.updatePassword(req.user.id, hashedPassword);
+      req.flash("messages", "Password updated successfully.");
+      res.redirect("/account/update");
+    } else {
+      req.flash("errors", "Current password is incorrect.");
+      res.redirect("/account/update");
+    }
+  } catch (error) {
+    console.error("Error updating password:", error);
+    req.flash("errors", "Failed to update password.");
+    res.redirect("/account/update");
+  }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, showManagementView, showUpdateView, updateAccountInfo, updatePassword}

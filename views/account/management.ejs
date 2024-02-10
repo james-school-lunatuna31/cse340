@@ -3,3 +3,11 @@
 <%- include('../partials/messages') %>
 <h2>Log in successful</h2>
 <p><%=greeting%></p>
+<% if (user.accountType === "Client") { %>
+<h2>Welcome <%= user.firstName %></h2>
+<% } else if (["Employee", "Admin"].includes(user.accountType)) { %>
+<h2>Welcome <%= user.firstName %></h2>
+<h3>Inventory Management</h3>
+<p><a href="/inventory/manage">Access Inventory Management</a></p>
+<% } %>
+<p><a href="/account/update/<%= user.id %>">Update account information</a></p>

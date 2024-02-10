@@ -103,4 +103,58 @@ validate.checkRegData = async (req, res, next) => {
     next()
   }
 
+  validate.updateInfoRules = () => {
+    return [
+      // firstname is required and must be string
+      body("account_firstname")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("First name is required."),
+  
+      // lastname is required and must be string
+      body("account_lastname")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Last name is required."),
+  
+      // Check if email is provided and is valid
+      body("account_email")
+        .trim()
+        .isEmail()
+        .withMessage("Please provide a valid email."),
+    ]
+  }
+
+  validate.checkUpdateInfo = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
+
+  validate.updatePasswordRules = () => {
+    return [
+      // password is required and must be strong password
+      body("account_password")
+        .trim()
+        .isStrongPassword({
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
+        .withMessage("Password must be stronger."),
+    ]
+  }
+
+  validate.checkUpdatePassword = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
+
   module.exports = validate

@@ -19,6 +19,7 @@ const session = require("express-session")
 const pool = require("./database/")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const jwt = require('jsonwebtoken')
 
 /* ***********************
  * View Engine and Templates
@@ -26,6 +27,7 @@ const cookieParser = require("cookie-parser")
 /* ***********************
  * Middleware
  * ************************/
+app.use(cookieParser()) // Ensure cookie-parser middleware is correctly set up and used before accessing req.cookies
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -36,6 +38,24 @@ app.use(session({
   saveUninitialized: true,
   name: 'sessionId',
 }))
+
+// Middleware to set clientIsLoggedIn based on JWT token
+app.use((req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        res.locals.clientIsLoggedIn = false;
+      } else {
+        res.locals.clientIsLoggedIn = true;
+      }
+      next();
+    });
+  } else {
+    res.locals.clientIsLoggedIn = false;
+    next();
+  }
+});
 
 // Express Messages Middleware
 app.use(require('connect-flash')())
@@ -48,7 +68,6 @@ app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(cookieParser())
 app.use(utilities.checkJWTToken)
 
 /* ***********************
@@ -60,7 +79,7 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes
 app.use("/inv", inventoryRoute)
 // Account Route
-app.use("/account",accountsRoute)
+app.use("/account", accountsRoute)
 // Error trigger route
 app.get("/error", async (req, res, next) => {
   next({status: 500, message: 'Task Failed Succesfully'})

@@ -25,4 +25,26 @@ router.post("/login",
           regValidate.checkLoginData,
           utilities.handleErrors(accounts.accountLogin));
 
+// Route to deliver account update view
+router.get("/update", utilities.checkLogin, utilities.handleErrors(accounts.showUpdateView));
+
+// Route to process account information update
+router.post("/update/info",
+            regValidate.updateInfoRules(),
+            regValidate.checkUpdateInfo,
+            utilities.handleErrors(accounts.updateAccountInfo));
+
+// Route to process password update
+router.post("/update/password",
+            regValidate.updatePasswordRules(),
+            regValidate.checkUpdatePassword,
+            utilities.handleErrors(accounts.updatePassword));
+
+// Route for logout process
+router.get("/logout", (req, res) => {
+  console.log("Logging out user");
+  res.clearCookie("jwt");
+  res.redirect("/account/login");
+});
+
 module.exports = router; 

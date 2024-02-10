@@ -1,0 +1,54 @@
+<h1><%= title %></h1>
+<% if (errors) { %>
+<ul class="errors">
+  <% errors.forEach(function(error) { %>
+  <li><%= error.msg %></li>
+  <% }); %>
+</ul>
+<% } %> <% if (messages) { %>
+<p class="messages"><%= messages %></p>
+<% } %>
+
+<form action="/account/update" method="POST" class="form-account-update">
+  <fieldset>
+    <legend>Account Update</legend>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required />
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required />
+
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" required />
+
+    <button type="submit">Update Account</button>
+  </fieldset>
+</form>
+
+<form
+  action="/account/change-password"
+  method="POST"
+  class="form-change-password"
+>
+  <fieldset>
+    <legend>Change Password</legend>
+    <label for="currentPassword">Current Password:</label>
+    <input
+      type="password"
+      id="currentPassword"
+      name="currentPassword"
+      required
+    />
+
+    <label for="newPassword">New Password:</label>
+    <input
+      type="password"
+      id="newPassword"
+      name="newPassword"
+      required
+      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}"
+    />
+
+    <button type="submit">Change Password</button>
+  </fieldset>
+</form>
