@@ -119,9 +119,17 @@ validate.checkRegData = async (req, res, next) => {
   
       // Check if email is provided and is valid
       body("account_email")
-        .trim()
-        .isEmail()
-        .withMessage("Please provide a valid email."),
+      .trim()
+      .isEmail()
+      .normalizeEmail() // refer to validator.js docs
+      .withMessage("A valid email is required.")
+      .custom(async (account_email) => {
+        const emailExists = await accountModel.checkExistingEmail(account_email)
+        if (emailExists){
+          throw new Error("Email exists. Please log in or use different email")
+        }
+      }),
+        
     ]
   }
 

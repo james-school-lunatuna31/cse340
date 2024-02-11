@@ -12,21 +12,40 @@
 <form action="/account/update" method="POST" class="form-account-update">
   <fieldset>
     <legend>Account Update</legend>
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" name="firstName" required />
+    <label for="account_firstname">First Name:</label>
+    <input
+      type="text"
+      id="account_firstname"
+      name="account_firstname"
+      value="<%= account.account_firstname %>"
+      required
+    />
 
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" name="lastName" required />
+    <label for="account_lastname">Last Name:</label>
+    <input
+      type="text"
+      id="account_lastname"
+      name="account_lastname"
+      value="<%= account.account_lastname %>"
+      required
+    />
 
-    <label for="email">Email Address:</label>
-    <input type="email" id="email" name="email" required />
+    <label for="account_email">Email Address:</label>
+    <input
+      type="email"
+      id="account_email"
+      name="account_email"
+      value="<%= account.account_email %>"
+      required
+    />
 
     <button type="submit">Update Account</button>
   </fieldset>
+  <input type="hidden" name="account_id" value="<%- account.account_id %>" />
 </form>
 
 <form
-  action="/account/change-password"
+  action="/account/update/password"
   method="POST"
   class="form-change-password"
 >
@@ -40,15 +59,16 @@
       required
     />
 
-    <label for="newPassword">New Password:</label>
+    <label for="account_password">New Password:</label>
     <input
       type="password"
-      id="newPassword"
-      name="newPassword"
+      id="account_password"
+      name="account_password"
       required
       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}"
     />
 
     <button type="submit">Change Password</button>
   </fieldset>
+  <input type="hidden" name="account_id" value="<%- account.account_id %>" />
 </form>

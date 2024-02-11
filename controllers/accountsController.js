@@ -2,6 +2,7 @@ const utilities = require("../utilities")
 const accountModel = require("../models/account-model.js")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const e = require("connect-flash")
 require("dotenv").config()
 /* ****************************************
 *  Deliver login view
@@ -127,77 +128,67 @@ async function accountLogin(req, res) {
  async function showManagementView(req, res){
   let nav = await utilities.getNav()
 
-  const token = req.cookies.jwt;
-  let accountData;
-
-  if (token) {
-    try {
-      // Decode the token to get the payload
-      accountData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    } catch (error) {
-      // Handle error (token verification failed, token expired, etc.)
-      console.error("Token verification failed:", error);
-      return res.status(403).send("Access Forbidden");
-    }
-  }
-
-  // Ensure accountData is defined and has account_firstname
-  if (!accountData || !accountData.account_firstname) {
-    return res.status(403).send("Access Forbidden");
-  }
-
-  let greeting = "Welcome " + accountData.account_firstname; 
   res.render("account/management",{
     title: "Account Manager",
     nav,
     messages: "",
-    greeting: greeting,
-    user: accountData, // Pass the user object to the view
-    clientIsLoggedIn: true // Ensure clientIsLoggedIn is passed to views
   });
 }
 
 // New functions for account update view and handling account updates and password changes
 async function showUpdateView(req, res) {
   let nav = await utilities.getNav();
+  const accountId = req.params.account_id
+  const accountData = await accountModel.getAccountById(accountId);
+  if (!accountData) {
+    req.flash("errors", "Failed to retrieve account information.");
+    return res.redirect("/account/update");
+  }
   res.render("account/update", {
     title: "Update Account",
     nav,
     errors: req.flash("errors"),
-    messages: req.flash("messages")
+    messages: req.flash("messages"),
+    account: accountData 
   });
 }
 
 async function updateAccountInfo(req, res) {
-  const { firstName, lastName, email } = req.body;
+  const firstName = req.body.account_firstname;
+  const lastName = req.body.account_lastname;
+  const email = req.body.account_email;
+  const id = parseInt(req.body.account_id);
   try {
-    await accountModel.updateAccountInfo(req.user.id, firstName, lastName, email);
+    await accountModel.updateAccountInfo(id, firstName, lastName, email);
+    req.flash("messages", "Success.");
     req.flash("messages", "Account information updated successfully.");
-    res.redirect("/account/update");
+    res.redirect("/account")
+
   } catch (error) {
-    console.error("Error updating account info:", error);
+    req.flash("errors", "Failed.");
     req.flash("errors", "Failed to update account information.");
-    res.redirect("/account/update");
-  }
+    res.redirect("/account")}
 }
 
 async function updatePassword(req, res) {
-  const { currentPassword, newPassword } = req.body;
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.account_password;
+  const id = parseInt(req.body.account_id);
   try {
-    const accountData = await accountModel.getAccountById(req.user.id);
+    const accountData = await accountModel.getAccountById(id);
     if (await bcrypt.compare(currentPassword, accountData.account_password)) {
       const hashedPassword = await bcrypt.hash(newPassword, 14);
-      await accountModel.updatePassword(req.user.id, hashedPassword);
+      await accountModel.updatePassword(id, hashedPassword);
       req.flash("messages", "Password updated successfully.");
-      res.redirect("/account/update");
+      res.redirect("/account");
     } else {
       req.flash("errors", "Current password is incorrect.");
-      res.redirect("/account/update");
+      res.redirect("/account");
     }
   } catch (error) {
     console.error("Error updating password:", error);
     req.flash("errors", "Failed to update password.");
-    res.redirect("/account/update");
+    res.redirect("/account");
   }
 }
 

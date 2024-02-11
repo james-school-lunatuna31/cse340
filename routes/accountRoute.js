@@ -9,6 +9,7 @@ router.get("/", utilities.checkLogin, utilities.handleErrors(accounts.showManage
 // Route to build login
 router.get("/login", utilities.handleErrors(accounts.buildLogin));
 //post registration
+
 // Process the registration data
 router.post(
     "/register",
@@ -26,10 +27,10 @@ router.post("/login",
           utilities.handleErrors(accounts.accountLogin));
 
 // Route to deliver account update view
-router.get("/update", utilities.checkLogin, utilities.handleErrors(accounts.showUpdateView));
+router.get("/update/:account_id", utilities.checkLogin, utilities.handleErrors(accounts.showUpdateView));
 
 // Route to process account information update
-router.post("/update/info",
+router.post("/update",
             regValidate.updateInfoRules(),
             regValidate.checkUpdateInfo,
             utilities.handleErrors(accounts.updateAccountInfo));
