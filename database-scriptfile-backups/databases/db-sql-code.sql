@@ -239,3 +239,7 @@ VALUES (
 UPDATE public.inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+-- FINAL ENHANCEMENT
+ALTER TABLE public.account
+ADD COLUMN totp_secret CHAR(32),
+    ADD COLUMN totp_enabled BOOLEAN DEFAULT FALSE;
