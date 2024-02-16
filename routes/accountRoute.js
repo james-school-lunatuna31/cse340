@@ -26,6 +26,12 @@ router.post("/login",
           regValidate.checkLoginData,
           utilities.handleErrors(accounts.accountLogin));
 
+// Route for TOTP setup page
+router.get("/mfa/:account_id", utilities.checkLogin, utilities.handleErrors(accounts.setupTOTP));
+
+// Route for TOTP verification during login
+router.post("/login/mfa/:account_id", utilities.handleErrors(accounts.verifyTOTPLogin));
+
 // Route to deliver account update view
 router.get("/update/:account_id", utilities.checkLogin, utilities.handleErrors(accounts.showUpdateView));
 
@@ -47,5 +53,8 @@ router.get("/logout", (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/account/login");
 });
+
+// Ensure TOTP verification route exists and is correct
+router.post("/verify-totp-setup/:account_id", accounts.verifyTOTPSetup);
 
 module.exports = router; 

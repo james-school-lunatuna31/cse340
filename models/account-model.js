@@ -1,4 +1,6 @@
 const pool = require('../database/index');
+const { authenticator } = require('otplib');
+const QRCode = require('qrcode');
 
 /* *****************************
 *   Register new account
@@ -31,7 +33,7 @@ async function checkExistingEmail(account_email){
 async function getAccountByEmail (account_email) {
   try {
     const result = await pool.query(
-      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
+      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password, totp_enabled FROM account WHERE account_email = $1',
       [account_email])
     return result.rows[0]
   } catch (error) {
@@ -45,7 +47,7 @@ async function getAccountByEmail (account_email) {
 async function getAccountById(account_id) {
   try {
     const result = await pool.query(
-      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_id = $1',
+      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password, totp_enabled FROM account WHERE account_id = $1',
       [account_id])
     return result.rows[0]
   } catch (error) {
@@ -77,4 +79,62 @@ async function updatePassword(account_id, account_password) {
   }
 }
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, updateAccountInfo, updatePassword};
+/* *****************************
+* Enable TOTP
+* ***************************** */
+async function enableTOTP(account_id, totp_secret) {
+  try {
+    const sql = "UPDATE account SET totp_secret = $1, totp_enabled = TRUE WHERE account_id = $2 RETURNING *";
+    const result = await pool.query(sql, [totp_secret, account_id]);
+    return result.rows[0]; // Return the updated account information
+  } catch (error) {
+    console.error("Error enabling TOTP:", error);
+    throw error;
+  }
+}
+
+/* *****************************
+* Setup TOTP
+* ***************************** */
+async function setTOTPSecret(account_id, totp_secret) {
+  try {
+    const sql = "UPDATE account SET totp_secret = $1, totp_enabled = TRUE WHERE account_id = $2 RETURNING *";
+    const result = await pool.query(sql, [totp_secret, account_id]);
+    return result.rows[0]; // Return the updated account information
+  } catch (error) {
+    console.error("Error setting TOTP secret:", error);
+    throw error; // Rethrow or handle as needed
+  }
+}
+
+/* *****************************
+* Verify TOTP
+* ***************************** */
+async function verifyTOTP(account_id, totp_code) {
+  try {
+    const sql = "SELECT totp_secret FROM account WHERE account_id = $1";
+    const result = await pool.query(sql, [account_id]);
+    if (result.rows.length > 0) {
+      const { totp_secret } = result.rows[0];
+      return authenticator.verify({ token: totp_code, secret: totp_secret });
+    }
+    return false; // Account not found or no TOTP secret
+  } catch (error) {
+    console.error("Error verifying TOTP:", error);
+    return false; // In case of error, treat as verification failure
+  }
+}
+
+
+
+module.exports = { 
+  registerAccount, 
+  checkExistingEmail, 
+  getAccountByEmail, 
+  getAccountById, 
+  updateAccountInfo, 
+  updatePassword,
+  enableTOTP,
+  setTOTPSecret,
+  verifyTOTP
+};

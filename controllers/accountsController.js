@@ -3,6 +3,15 @@ const accountModel = require("../models/account-model.js")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const e = require("connect-flash")
+const { authenticator } = require('otplib');
+const QRCode = require('qrcode');
+
+authenticator.options = {
+  step: 30,
+  window: 1,
+  digits: 6,
+};
+
 require("dotenv").config()
 /* ****************************************
 *  Deliver login view
@@ -33,10 +42,8 @@ async function buildLogin(req, res, next) {
 async function registerAccount(req, res) {
     let nav = await utilities.getNav()
     const { account_firstname, account_lastname, account_email, account_password } = req.body
-// Hash the password before storing
 let hashedPassword
 try {
-  // regular password and cost (salt is generated automatically)
   hashedPassword = await bcrypt.hash(account_password, 14)
 } catch (error) {
   req.flash("Notice","Error")
@@ -86,42 +93,53 @@ try {
  *  Process login request
  * ************************************ */
 async function accountLogin(req, res) {
-  let nav = await utilities.getNav()
-  const { account_email, account_password } = req.body
-  const accountData = await accountModel.getAccountByEmail(account_email)
+  let nav = await utilities.getNav();
+  const { account_email, account_password } = req.body; 
+  const accountData = await accountModel.getAccountByEmail(account_email);
+
   if (!accountData) {
-    req.flash("notice","Error Logging in")
-    req.flash("notice", "Please check your credentials and try again.")
-    res.status(400).render("account/login", {
+    req.flash("notice", "Error Logging in");
+    req.flash("notice", "Please check your credentials and try again.");
+    return res.status(400).render("account/login", {
       title: "Login",
       nav,
       errors: null,
       account_email: account_email,
       messages: req.flash("notice")
-    })
-    return
+    });
   }
+
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
-      delete accountData.account_password
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
-      res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-      return res.redirect("/account/")
+      if (accountData.totp_enabled) {
+        return res.render("account/verify-totp", {
+          title: "Verify",
+          nav,
+          errors: null,
+          account_id: accountData.account_id, 
+          accountId: accountData.account_id,
+          messages: ""
+        });
+      } else {
+        console.log(accountData)
+        const accessToken = jwt.sign({ ...accountData, totpVerified: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+
+        return res.redirect("/account")}
     } else {
-      // Password does not match
-      req.flash("notice", "Error Logging in")
-      req.flash("notice", "Please check your credentials and try again.")
-      res.status(401).render("account/login", {
+      req.flash("notice", "Error Logging in");
+      req.flash("notice", "Please check your credentials and try again.");
+      return res.status(401).render("account/login", {
         title: "Login",
         nav,
         errors: null,
         account_email: account_email,
         messages: req.flash("notice")
-      })
+      });
     }
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).send("An error occurred during the login process.");
+    return res.status(500).send("An error occurred during the login process.");
   }
  }
 
@@ -135,7 +153,6 @@ async function accountLogin(req, res) {
   });
 }
 
-// New functions for account update view and handling account updates and password changes
 async function showUpdateView(req, res) {
   let nav = await utilities.getNav();
   const accountId = req.params.account_id
@@ -149,7 +166,8 @@ async function showUpdateView(req, res) {
     nav,
     errors: req.flash("errors"),
     messages: req.flash("messages"),
-    account: accountData 
+    account: accountData,
+    loggedin: true
   });
 }
 
@@ -192,4 +210,62 @@ async function updatePassword(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, showManagementView, showUpdateView, updateAccountInfo, updatePassword}
+async function setupTOTP(req, res) {
+  let nav = await utilities.getNav();
+  const accountId = req.params.account_id; 
+  const totpSecret = await authenticator.generateSecret();
+  try {
+    const qrCodeURL = await QRCode.toDataURL(authenticator.keyuri(accountId, 'MyApp', totpSecret));
+    console.log(totpSecret)
+    req.session.totpSecret = totpSecret;
+    res.render("account/setup-totp", {title: "Setup MFA", nav, qrCodeURL, messages: req.flash("messages") });
+  } catch (error) {
+    console.error("Error setting up TOTP:", error);
+    req.flash("errors", "Failed to setup TOTP.");
+    res.redirect("/account")
+  }
+}
+
+async function verifyTOTPLogin(req, res) {
+  let nav = await utilities.getNav();
+  const accountId = req.params.account_id;
+  const { totp_code } = req.body;
+  const totpVerification = await accountModel.verifyTOTP(accountId, totp_code);
+  if (totpVerification) {
+    const accountData = await accountModel.getAccountById(accountId);
+    delete accountData.account_password; // Remove password from account data
+    const accessToken = await jwt.sign({ ...accountData, totpVerified: true }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+    res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+    res.redirect("/account")
+  } else {
+    req.flash("errors", "Invalid TOTP code.");
+    req.flash("errors", "Please enter a valid code.");
+    res.render("account/verify-totp", {
+      title: "Verify",
+      nav: await utilities.getNav(),
+      errors: null,
+      accountId: accountId,
+      messages: req.flash("errors")
+    });
+  }
+}
+
+async function verifyTOTPSetup(req, res) {
+  let nav = await utilities.getNav();
+  const accountId = req.params.account_id;
+  const { totp_code } = req.body;
+  const totpSecret = req.session.totpSecret; 
+  if (authenticator.verify({ token: totp_code, secret: totpSecret })) {
+    await accountModel.enableTOTP(accountId, totpSecret);
+    delete req.session.totpSecret;
+    req.flash("Success","Success")
+    req.flash("Success","TOTP has been added to the account")
+    res.redirect("/account")  } else {
+    req.flash("Fail","Failed")
+    req.flash("Fail","Invalid TOTP code")
+    const qrCodeURL = await QRCode.toDataURL(authenticator.keyuri(accountId, 'MyApp', totpSecret));
+    res.render("account/setup-totp", {title: "Setup MFA", nav, qrCodeURL, messages: req.flash("Fail") });
+}
+  }
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, showManagementView, showUpdateView, updateAccountInfo, updatePassword, setupTOTP, verifyTOTPLogin, verifyTOTPSetup}
+

@@ -1,0 +1,7 @@
+<%- include('../partials/messages') %>
+
+<p>Please enter the code from your TOTP application to continue.</p>
+<form action="/account/login/mfa/<%= accountId %>" method="post">
+  <input type="text" name="totp_code" placeholder="Enter TOTP code" />
+  <button type="submit">Verify</button>
+</form>

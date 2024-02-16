@@ -1,0 +1,19 @@
+<%- include('../partials/messages') %>
+
+<h1>Setup Two-Factor Authentication</h1>
+<p>
+  Scan the QR code below with your TOTP application (e.g., Google Authenticator)
+  to set up two-factor authentication for your account.
+</p>
+<img src="<%= qrCodeURL %>" alt="TOTP QR Code" />
+<p>
+  After scanning the QR code, enter the code from your TOTP application to
+  verify setup.
+</p>
+<form
+  action="/account/verify-totp-setup/<%= locals.accountData.account_id %>"
+  method="post"
+>
+  <input type="text" name="totp_code" placeholder="Enter TOTP code" />
+  <button type="submit">Verify</button>
+</form>
